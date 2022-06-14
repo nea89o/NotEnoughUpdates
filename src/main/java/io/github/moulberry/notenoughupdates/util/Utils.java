@@ -156,7 +156,7 @@ public class Utils {
 	}
 
 	public static ScaledResolution peekGuiScale() {
-		return lastScale;
+		return null;
 	}
 
 	public static ScaledResolution pushGuiScale(int scale) {

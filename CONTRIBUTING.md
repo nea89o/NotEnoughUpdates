@@ -21,7 +21,6 @@
 - Import that folder as a Gradle Project in your IDE (IntelliJ should autodetect it as gradle if you select the `NotEnoughUpdates` folder in the Open dialog)
 - Set your project SDK to your 1.8 JDK. This can be done in the modules settings (CTRL+ALT+SHIFT+S) in IntelliJ.
 - Set your gradle JVM to your 1.17 JDK. This can be done by searching for `gradle jvm` in the CTRL+SHIFT+A dialog in IntelliJ.
-- Run the `gen<IntelliJ/Eclipse>Runs` gradle task. In IntelliJ that can be done in the gradle tab on the right side of your IDE.
 - Optionally, run the `genSources` gradle task.
 - Run the `Minecraft Client` to make sure that everything works.
 

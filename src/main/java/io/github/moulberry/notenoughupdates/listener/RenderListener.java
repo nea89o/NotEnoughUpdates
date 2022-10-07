@@ -83,7 +83,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
@@ -327,8 +326,7 @@ public class RenderListener {
 										JsonObject json = neu.manager.getItemInformation().get(resInternalname);
 										json.addProperty("crafttext", "Requires: " + col);
 
-										Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-											"Added: " + resInternalname));
+										Utils.addChatMessage("Added: " + resInternalname);
 										neu.manager.writeJsonDefaultDir(json, resInternalname + ".json");
 										neu.manager.loadItem(resInternalname);
 									}
@@ -1304,17 +1302,15 @@ public class RenderListener {
 							))
 						) {
 							writer.write(gson.toJson(jsonObject));
-							Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-								EnumChatFormatting.AQUA + "Parsed and saved: " + EnumChatFormatting.WHITE + id));
+							Utils.addChatMessage(EnumChatFormatting.AQUA + "Parsed and saved: " + EnumChatFormatting.WHITE + id);
 						}
 					} catch (IOException ignored) {
-						Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-							EnumChatFormatting.RED + "Error while writing file."));
+						Utils.addChatMessage(EnumChatFormatting.RED + "Error while writing file.");
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-						EnumChatFormatting.RED + "Error while parsing inventory. Try again or check logs for details."));
+					Utils.addChatMessage(
+						EnumChatFormatting.RED + "Error while parsing inventory. Try again or check logs for details.");
 				}
 			}
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_RETURN) && NotEnoughUpdates.INSTANCE.config.hidden.dev) {
@@ -1409,8 +1405,7 @@ public class RenderListener {
 								} else if (cachedDefinitions.containsKey(item)) {
 									costArray.add(new JsonPrimitive(cachedDefinitions.get(item) + ":" + amountString));
 								} else {
-									mc.thePlayer.addChatMessage(new ChatComponentText(
-										"Change the item ID of " + item + " to the correct one and press Enter."));
+									Utils.addChatMessage("Change the item ID of " + item + " to the correct one and press Enter.");
 									NEUOverlay.getTextField().setText(item);
 									event.setCanceled(true);
 									typing = true;
@@ -1439,17 +1434,16 @@ public class RenderListener {
 							))
 						) {
 							writer.write(gson.toJson(newNPC));
-							Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-								EnumChatFormatting.AQUA + "Parsed and saved: " + EnumChatFormatting.WHITE + displayName));
+							Utils.addChatMessage(
+								EnumChatFormatting.AQUA + "Parsed and saved: " + EnumChatFormatting.WHITE + displayName);
 						}
 					} catch (IOException ignored) {
-						Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-							EnumChatFormatting.RED + "Error while writing file."));
+						Utils.addChatMessage(EnumChatFormatting.RED + "Error while writing file.");
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					mc.thePlayer.addChatMessage(new ChatComponentText(
-						EnumChatFormatting.RED + "Error while parsing inventory. Try again or check logs for details"));
+					Utils.addChatMessage(
+						EnumChatFormatting.RED + "Error while parsing inventory. Try again or check logs for details");
 				}
 			}
 		} else if (NotEnoughUpdates.INSTANCE.config.hidden.dev && Keyboard.isKeyDown(Keyboard.KEY_B) &&
@@ -1469,9 +1463,9 @@ public class RenderListener {
 				if (stack.getDisplayName().isEmpty() || stack.getDisplayName().equals(" ")) continue;
 				String internalName = NotEnoughUpdates.INSTANCE.manager.getInternalNameForItem(stack);
 				if (internalName == null) {
-					Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
+					Utils.addChatMessage(
 						EnumChatFormatting.RED + "ERROR: Could not get internal name for: " + EnumChatFormatting.AQUA +
-							stack.getDisplayName()));
+							stack.getDisplayName());
 					continue;
 				}
 				JsonObject itemObject = NotEnoughUpdates.INSTANCE.manager.getJsonForItem(stack);
@@ -1491,13 +1485,11 @@ public class RenderListener {
 				itemObject.add("lore", newLore);
 
 				if (!NEUItemEditor.saveOnly(internalName, itemObject)) {
-					Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-						EnumChatFormatting.RED + "ERROR: Failed to save item: " + EnumChatFormatting.AQUA +
-							stack.getDisplayName()));
+					Utils.addChatMessage(
+						EnumChatFormatting.RED + "ERROR: Failed to save item: " + EnumChatFormatting.AQUA + stack.getDisplayName());
 				}
 			}
-			Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-				EnumChatFormatting.AQUA + "Parsed page: " + lower.getDisplayName().getUnformattedText()));
+			Utils.addChatMessage(EnumChatFormatting.AQUA + "Parsed page: " + lower.getDisplayName().getUnformattedText());
 			event.setCanceled(true);
 			return;
 		}
@@ -1701,7 +1693,7 @@ public class RenderListener {
 					json.addProperty("clickcommand", "viewrecipe");
 					json.addProperty("modver", NotEnoughUpdates.VERSION);
 					try {
-						Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("Added: " + resInternalname));
+						Utils.addChatMessage("Added: " + resInternalname);
 						neu.manager.writeJsonDefaultDir(json, resInternalname + ".json");
 						neu.manager.loadItem(resInternalname);
 					} catch (IOException ignored) {
@@ -1714,5 +1706,25 @@ public class RenderListener {
 	@SubscribeEvent
 	public void onRenderLast(RenderWorldLastEvent event) {
 		CrystalMetalDetectorSolver.render(event.partialTicks);
+	}
+
+	/**
+	 * Support for switching between different pages in the RecipeView gui via right and left arrow key
+	 * @param event
+	 */
+	//Because GuiScreen.keyTyped does not fire the KEY_LEFT and KEY_RIGHT keys. Maybe some event cancelled it?
+	@SubscribeEvent
+	public void onMouseClick(GuiScreenEvent.KeyboardInputEvent.Post event) {
+
+		if (!NotEnoughUpdates.INSTANCE.isOnSkyblock()) return;
+
+		Minecraft minecraft = Minecraft.getMinecraft();
+		if (minecraft == null || minecraft.thePlayer == null) return;
+
+		GuiScreen screen = minecraft.currentScreen;
+		if (screen instanceof GuiItemRecipe) {
+			GuiItemRecipe itemRecipe = (GuiItemRecipe) screen;
+			itemRecipe.arrowKeyboardInput();
+		}
 	}
 }

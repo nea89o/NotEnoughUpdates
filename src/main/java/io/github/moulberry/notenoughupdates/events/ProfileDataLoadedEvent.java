@@ -17,24 +17,24 @@
  * along with NotEnoughUpdates. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.moulberry.notenoughupdates.commands.dungeon;
+package io.github.moulberry.notenoughupdates.events;
 
-import io.github.moulberry.notenoughupdates.commands.ClientCommandBase;
-import io.github.moulberry.notenoughupdates.util.Utils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.util.EnumChatFormatting;
+import com.google.gson.JsonObject;
 
-public class DnCommand extends ClientCommandBase {
+import javax.annotation.Nullable;
 
-	public DnCommand() {
-		super("dn");
+//TODO extend the usage of this event (accessory bag and storage data)
+public class ProfileDataLoadedEvent extends NEUEvent {
+
+	@Nullable
+	private final JsonObject data;
+
+	public ProfileDataLoadedEvent(@Nullable JsonObject entireApiResponse) {
+		this.data = entireApiResponse;
 	}
 
-	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-		Minecraft.getMinecraft().thePlayer.sendChatMessage("/warp dungeon_hub");
-		Utils.addChatMessage(EnumChatFormatting.AQUA + "Warping to:" + EnumChatFormatting.YELLOW + " Deez Nuts lmao");
+	@Nullable
+	public JsonObject getData() {
+		return data;
 	}
 }

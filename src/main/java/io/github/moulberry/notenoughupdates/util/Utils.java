@@ -77,6 +77,7 @@ import java.math.BigInteger;
 import java.nio.FloatBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -146,6 +147,7 @@ public class Utils {
 	public static Splitter PATH_SPLITTER = Splitter.on(".").omitEmptyStrings().limit(2);
 	private static ScaledResolution lastScale = new ScaledResolution(Minecraft.getMinecraft());
 	private static long startTime = 0;
+	private static DecimalFormat simpleDoubleFormat = new DecimalFormat("0.0");
 
 	public static <T> ArrayList<T> createList(T... values) {
 		ArrayList<T> list = new ArrayList<>();
@@ -328,6 +330,11 @@ public class Utils {
 	}
 
 	public static String shortNumberFormat(double n, int iteration) {
+		if (n < 3 && n > 0) {
+			return simpleDoubleFormat.format(n);
+		}
+
+		if (n < 1000 && iteration == 0) return "" + (int) n;
 		double d = ((long) n / 100) / 10.0;
 		boolean isRound = (d * 10) % 10 == 0;
 		return (d < 1000 ?
@@ -1945,13 +1952,13 @@ public class Utils {
 		if (NotEnoughUpdates.INSTANCE.config.notifications.outdatedRepo) {
 			NotificationHandler.displayNotification(Lists.newArrayList(
 					EnumChatFormatting.RED + EnumChatFormatting.BOLD.toString() + "Missing repo data",
-					EnumChatFormatting.RED +
-						"Data used for many NEU features is not up to date, this should normally not be the case.",
-					EnumChatFormatting.RED + "You can try " + EnumChatFormatting.BOLD + "/neuresetrepo" + EnumChatFormatting.RESET +
-						EnumChatFormatting.RED + " and restart your game" +
-						" to see if that fixes the issue.",
-					EnumChatFormatting.RED + "If the problem persists please join " + EnumChatFormatting.BOLD +
-						"discord.gg/moulberry" +
+				EnumChatFormatting.RED +
+					"Data used for many NEU features is not up to date, this should normally not be the case.",
+				EnumChatFormatting.RED + "You can try " + EnumChatFormatting.BOLD + "/neuresetrepo" + EnumChatFormatting.RESET +
+					EnumChatFormatting.RED + " and restart your game" +
+					" to see if that fixes the issue.",
+				EnumChatFormatting.RED + "If the problem persists please join " + EnumChatFormatting.BOLD +
+					"discord.gg/moulberry" +
 						EnumChatFormatting.RESET + EnumChatFormatting.RED + " and message in " + EnumChatFormatting.BOLD +
 						"#neu-support" + EnumChatFormatting.RESET + EnumChatFormatting.RED + " to get support"
 				),
@@ -1998,5 +2005,14 @@ public class Utils {
 
 	public static String getLastOpenChestName() {
 		return SBInfo.getInstance().lastOpenChestName;
+	}
+
+	public static void addChatMessage(String message) {
+		EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
+		if (thePlayer != null) {
+			thePlayer.addChatMessage(new ChatComponentText(message));
+		} else {
+			System.out.println(message);
+		}
 	}
 }

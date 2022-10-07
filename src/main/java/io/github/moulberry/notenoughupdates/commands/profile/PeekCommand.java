@@ -77,8 +77,8 @@ public class PeekCommand extends ClientCommandBase {
 				}
 
 				if (peekScheduledFuture != null && !peekScheduledFuture.isDone()) {
-					Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-						EnumChatFormatting.RED + "[PEEK] New peek command run, cancelling old one."));
+					Utils.addChatMessage(
+						EnumChatFormatting.RED + "[PEEK] New peek command run, cancelling old one.");
 					peekScheduledFuture.cancel(true);
 				}
 
@@ -116,8 +116,7 @@ public class PeekCommand extends ClientCommandBase {
 									EnumChatFormatting.STRIKETHROUGH + "-=-"), id);
 
 							if (skyblockInfo == null) {
-								Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-									EnumChatFormatting.YELLOW + "Skills API disabled!"));
+								Utils.addChatMessage(EnumChatFormatting.YELLOW + "Skills API disabled!");
 							} else {
 								float totalSkillLVL = 0;
 								float totalSkillCount = 0;
@@ -188,20 +187,17 @@ public class PeekCommand extends ClientCommandBase {
 
 								overallScore += cata * cata / 2000f;
 
-								Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-									g + "Combat: " + combatPrefix + (int) Math.floor(combat) +
+								Utils.addChatMessage(g + "Combat: " + combatPrefix + (int) Math.floor(combat) +
 										(cata > 0 ? g + " - Cata: " + cataPrefix + cata : "") +
-										g + " - AVG: " + avgPrefix + (int) Math.floor(avgSkillLVL)));
-								Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-									g + "Slayer: " + zombiePrefix + (int) Math.floor(zombie) + g + "-" +
+										g + " - AVG: " + avgPrefix + (int) Math.floor(avgSkillLVL));
+								Utils.addChatMessage(g + "Slayer: " + zombiePrefix + (int) Math.floor(zombie) + g + "-" +
 										spiderPrefix + (int) Math.floor(spider) + g + "-" +
 										wolfPrefix + (int) Math.floor(wolf) + g+ "-" +
 										endermanPrefix + (int) Math.floor(enderman) + g + "-" +
-										blazePrefix + (int) Math.floor(blaze)));
+										blazePrefix + (int) Math.floor(blaze));
 							}
 							if (stats == null) {
-								Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-									EnumChatFormatting.YELLOW + "Skills, collection and/or inventory apis disabled!"));
+								Utils.addChatMessage(EnumChatFormatting.YELLOW + "Skills, collection and/or inventory apis disabled!");
 							} else {
 								int health = (int) stats.get("health");
 								int defence = (int) stats.get("defence");
@@ -229,11 +225,10 @@ public class PeekCommand extends ClientCommandBase {
 									: EnumChatFormatting.YELLOW)
 									: EnumChatFormatting.RED;
 
-								Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-									g + "Stats  : " + healthPrefix + health + EnumChatFormatting.RED + "\u2764 " +
-										defencePrefix + defence + EnumChatFormatting.GREEN + "\u2748 " +
-										strengthPrefix + strength + EnumChatFormatting.RED + "\u2741 " +
-										intelligencePrefix + intelligence + EnumChatFormatting.AQUA + "\u270e "));
+								Utils.addChatMessage(									g + "Stats  : " + healthPrefix + health + EnumChatFormatting.RED + "\u2764 " +
+									defencePrefix + defence + EnumChatFormatting.GREEN + "\u2748 " +
+									strengthPrefix + strength + EnumChatFormatting.RED + "\u2741 " +
+									intelligencePrefix + intelligence + EnumChatFormatting.AQUA + "\u270e ");
 							}
 							float bankBalance = Utils.getElementAsFloat(Utils.getElement(profileInfo, "banking.balance"), -1);
 							float purseBalance = Utils.getElementAsFloat(Utils.getElement(profileInfo, "coin_purse"), 0);
@@ -244,11 +239,10 @@ public class PeekCommand extends ClientCommandBase {
 								(money > 200 * 1000 * 1000
 									? EnumChatFormatting.GREEN
 									: EnumChatFormatting.YELLOW) : EnumChatFormatting.RED;
-							Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-								g + "Purse: " + moneyPrefix + Utils.shortNumberFormat(purseBalance, 0) + g + " - Bank: " +
-									(bankBalance == -1 ? EnumChatFormatting.YELLOW + "N/A" : moneyPrefix +
-										(isMe ? "4.8b" : Utils.shortNumberFormat(bankBalance, 0))) +
-									(networth > 0 ? g + " - Net: " + moneyPrefix + Utils.shortNumberFormat(networth, 0) : "")));
+							Utils.addChatMessage(								g + "Purse: " + moneyPrefix + Utils.shortNumberFormat(purseBalance, 0) + g + " - Bank: " +
+								(bankBalance == -1 ? EnumChatFormatting.YELLOW + "N/A" : moneyPrefix +
+									(isMe ? "4.8b" : Utils.shortNumberFormat(bankBalance, 0))) +
+								(networth > 0 ? g + " - Net: " + moneyPrefix + Utils.shortNumberFormat(networth, 0) : ""));
 
 							overallScore += Math.min(2, money / (100f * 1000 * 1000));
 
@@ -264,8 +258,7 @@ public class PeekCommand extends ClientCommandBase {
 							String col = NotEnoughUpdates.petRarityToColourMap.get(activePetTier);
 							if (col == null) col = EnumChatFormatting.LIGHT_PURPLE.toString();
 
-							Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(g + "Pet    : " +
-								col + WordUtils.capitalizeFully(activePet.replace("_", " "))));
+							Utils.addChatMessage(g + "Pet    : " + col + WordUtils.capitalizeFully(activePet.replace("_", " ")));
 
 							String overall = "Skywars Main";
 							if (isMe) {
@@ -290,8 +283,7 @@ public class PeekCommand extends ClientCommandBase {
 								overall = EnumChatFormatting.RED + "Played Skyblock";
 							}
 
-							Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(g + "Overall score: " +
-								overall + g + " (" + Math.round(overallScore * 10) / 10f + ")"));
+							Utils.addChatMessage(g + "Overall score: " + overall + g + " (" + Math.round(overallScore * 10) / 10f + ")");
 
 							peekCommandExecutorService.shutdownNow();
 						} else {

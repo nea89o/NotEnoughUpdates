@@ -26,11 +26,6 @@ import io.github.moulberry.notenoughupdates.NotEnoughUpdates;
 import io.github.moulberry.notenoughupdates.profileviewer.GuiProfileViewer;
 import io.github.moulberry.notenoughupdates.profileviewer.GuiProfileViewerPage;
 import io.github.moulberry.notenoughupdates.util.Utils;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -42,6 +37,12 @@ import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TrophyFishPage extends GuiProfileViewerPage {
 

@@ -23,6 +23,7 @@ import io.github.moulberry.notenoughupdates.BuildFlags;
 import io.github.moulberry.notenoughupdates.NotEnoughUpdates;
 import io.github.moulberry.notenoughupdates.commands.ClientCommandBase;
 import io.github.moulberry.notenoughupdates.core.config.GuiPositionEditor;
+import io.github.moulberry.notenoughupdates.core.util.MiscUtils;
 import io.github.moulberry.notenoughupdates.miscfeatures.FishingHelper;
 import io.github.moulberry.notenoughupdates.miscfeatures.customblockzones.CustomBiomes;
 import io.github.moulberry.notenoughupdates.miscfeatures.customblockzones.LocationChangeEvent;
@@ -30,6 +31,8 @@ import io.github.moulberry.notenoughupdates.miscfeatures.customblockzones.Specia
 import io.github.moulberry.notenoughupdates.miscgui.GuiPriceGraph;
 import io.github.moulberry.notenoughupdates.util.PronounDB;
 import io.github.moulberry.notenoughupdates.util.SBInfo;
+import io.github.moulberry.notenoughupdates.util.TabListUtils;
+import io.github.moulberry.notenoughupdates.util.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.command.CommandException;
@@ -56,6 +59,7 @@ public class DevTestCommand extends ClientCommandBase {
 			"lrg89",
 			"dediamondpro",
 			"lulonaut",
+			"hannibal2",
 			"craftyoldminer",
 			"eisengolem",
 			"whalker",
@@ -110,8 +114,7 @@ public class DevTestCommand extends ClientCommandBase {
 				Minecraft.getMinecraft().getNetHandler().getNetworkManager().closeChannel(component);
 				return;
 			}
-			Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.RED +
-				DEV_FAIL_STRINGS[devFailIndex++]));
+			Utils.addChatMessage(EnumChatFormatting.RED + DEV_FAIL_STRINGS[devFailIndex++]);
 			return;
 		}
 		if (args.length >= 1 && args[0].equalsIgnoreCase("profileinfo")) {
@@ -163,7 +166,8 @@ public class DevTestCommand extends ClientCommandBase {
 			return;
 		}
 		if (args.length == 1 && args[0].equalsIgnoreCase("dev")) {
-			NotEnoughUpdates.INSTANCE.config.hidden.dev = true;
+			NotEnoughUpdates.INSTANCE.config.hidden.dev = !NotEnoughUpdates.INSTANCE.config.hidden.dev;
+			Utils.addChatMessage("§e[NEU] Dev mode " + (NotEnoughUpdates.INSTANCE.config.hidden.dev ? "§aenabled": "§cdisabled"));
 			return;
 		}
 		if (args.length == 1 && args[0].equalsIgnoreCase("saveconfig")) {
@@ -172,8 +176,7 @@ public class DevTestCommand extends ClientCommandBase {
 		}
 		if (args.length == 1 && args[0].equalsIgnoreCase("searchmode")) {
 			NotEnoughUpdates.INSTANCE.config.hidden.firstTimeSearchFocus = true;
-			Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA +
-				"I would never search"));
+			Utils.addChatMessage(EnumChatFormatting.AQUA + "I would never search");
 			return;
 		}
 		if (args.length == 1 && args[0].equalsIgnoreCase("bluehair")) {
@@ -183,17 +186,24 @@ public class DevTestCommand extends ClientCommandBase {
 		if (args.length == 2 && args[0].equalsIgnoreCase("openGui")) {
 			try {
 				NotEnoughUpdates.INSTANCE.openGui = (GuiScreen) Class.forName(args[1]).newInstance();
-				Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-					"Opening gui: " + NotEnoughUpdates.INSTANCE.openGui));
+				Utils.addChatMessage("Opening gui: " + NotEnoughUpdates.INSTANCE.openGui);
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | ClassCastException e) {
 				e.printStackTrace();
-				Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("Failed to open this gui."));
+				Utils.addChatMessage("Failed to open this gui.");
 			}
 		}
 		if (args.length == 1 && args[0].equalsIgnoreCase("center")) {
 			double x = Math.floor(Minecraft.getMinecraft().thePlayer.posX) + 0.5f;
 			double z = Math.floor(Minecraft.getMinecraft().thePlayer.posZ) + 0.5f;
 			Minecraft.getMinecraft().thePlayer.setPosition(x, Minecraft.getMinecraft().thePlayer.posY, z);
+		}
+		if (args.length == 1 && args[0].equalsIgnoreCase("copytablist")) {
+			StringBuilder builder = new StringBuilder();
+			for (String name : TabListUtils.getTabList()) {
+				builder.append(name).append("\n");
+			}
+			MiscUtils.copyToClipboard(builder.toString());
+			Utils.addChatMessage("§e[NEU] Copied tablist to clipboard!");
 		}
 	}
 }

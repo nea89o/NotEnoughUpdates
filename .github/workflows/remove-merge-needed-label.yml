@@ -21,7 +21,7 @@ jobs:
       - run: |
           echo This is the merginator 2000 speaking, i am now checking your mergability
           if git merge-tree "$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})" ${{ github.event.pull_request.head.sha }} "${{ github.event.pull_request.base.sha }}" | grep "^<<<<<<<\|changed in both" >/dev/null; then
-            echo This PR is deemed: dirty :(
+            echo "This PR is deemed: dirty :("
             echo '{"labels":["$MERGE_LABEL"]}'|gh api -X POST --input - "$ISSUE_PATH"
           else
             echo This PR is deemed: clean!

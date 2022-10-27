@@ -1,8 +1,12 @@
 name: Remove merge label
 
 on:
-  - pull_request
+  - pull_request_target
 
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   check-mergability:
@@ -10,9 +14,6 @@ jobs:
       GH_TOKEN:
         ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
     steps:
       - uses: actions/checkout@v3
         name: Checkout feature

@@ -1,8 +1,9 @@
 name: Infer
 
 on:
-  - pull_request
+  - pull_request_target
   - workflow_dispatch
+permissions: {}
 jobs:
   inferering:
     runs-on: ubuntu-latest

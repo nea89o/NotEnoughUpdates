@@ -22,10 +22,10 @@ jobs:
           echo This is the merginator 2000 speaking, i am now checking your mergability
           if git merge-tree "$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})" ${{ github.event.pull_request.head.sha }} "${{ github.event.pull_request.base.sha }}" | grep "^<<<<<<<\|changed in both" >/dev/null; then
             echo "This PR is deemed: dirty :("
-            echo '{"labels":["$MERGE_LABEL"]}'|gh api -X POST --input - "$ISSUE_PATH"
+            gh api -X DELETE $ISSUE_PATH/$MERGE_LABEL || true
           else
             echo This PR is deemed: clean!
-            gh api -X DELETE $ISSUE_PATH/$MERGE_LABEL
+            echo '{"labels":["$MERGE_LABEL"]}'|gh api -X POST --input - "$ISSUE_PATH" || true
           fi
         env:
           MERGE_LABEL: needs-merge

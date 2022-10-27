@@ -20,4 +20,6 @@ jobs:
           fetch-depth: 0
       - run: |
           echo hi
-          git merge-tree "$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})" ${{ github.event.pull_request.head.sha }} "${{ github.event.pull_request.base.sha }}"
+          if git merge-tree "$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})" ${{ github.event.pull_request.head.sha }} "${{ github.event.pull_request.base.sha }}" | grep "^<<<<<<<\|changed in both"; then
+            echo unclean merge
+          fi

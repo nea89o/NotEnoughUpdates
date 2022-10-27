@@ -25,7 +25,7 @@ jobs:
             gh api -X DELETE $ISSUE_PATH/$MERGE_LABEL || true
           else
             echo This PR is deemed: clean!
-            echo '{"labels":["$MERGE_LABEL"]}'|gh api -X POST --input - "$ISSUE_PATH" || true
+            echo "{\"labels\":[\"$MERGE_LABEL\"]}"|gh api -X POST --input - "$ISSUE_PATH" || true
           fi
         env:
           MERGE_LABEL: needs-merge

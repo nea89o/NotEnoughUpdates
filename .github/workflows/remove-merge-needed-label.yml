@@ -19,7 +19,6 @@ jobs:
         with:
           fetch-depth: 0
       - run: |
-          echo ${{ toJSON(github) }}
           echo This is the merginator 2000 speaking, i am now checking your mergability
           if git merge-tree "$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})" ${{ github.event.pull_request.head.sha }} "${{ github.event.pull_request.base.sha }}" | grep "^<<<<<<<\|changed in both" >/dev/null; then
             echo "This PR is deemed: dirty :("
@@ -30,4 +29,4 @@ jobs:
           fi
         env:
           MERGE_LABEL: needs-merge
-          ISSUE_PATH: /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels
+          ISSUE_PATH: /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels

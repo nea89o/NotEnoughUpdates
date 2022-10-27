@@ -16,9 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        name: Checkout feature
         with:
           fetch-depth: 0
       - run: |
-          echo hi
-          git merge-tree "$(git merge-base ${{ github.event.pull_request.base.sha }} HEAD)" HEAD "${{ github.event.pull_request.base.sha }}"
+          git merge-tree "$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})" ${{ github.event.pull_request.head.sha }} "${{ github.event.pull_request.base.sha }}"

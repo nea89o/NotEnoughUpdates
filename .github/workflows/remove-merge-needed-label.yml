@@ -1,9 +1,11 @@
 name: Remove merge label
 
+on:
+  - pull_request
+
+
 jobs:
   check-mergability:
-    on:
-      - pull_request
     env:
       GH_TOKEN:
         ${{ secrets.GITHUB_TOKEN }}

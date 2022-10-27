@@ -1,5 +1,5 @@
 <!-- markdownlint-disable-file MD001 MD033 -->
-<h1 align="center">NotEnoughUpdates</h1>hfeafoij
+<h1 align="center">NotEnoughUpdates</h1>h
 
 <div align="center">
     <!-- release -->

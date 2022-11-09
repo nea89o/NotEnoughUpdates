@@ -1,0 +1,18 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The version to prepare the release for'
+        required: true
+        
+
+jobs:
+  promote-release:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          VERSION: ${{ github.event.inputs.version }}
+        run: |
+          echo Hello World
+          echo Creating a build for version
